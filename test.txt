@@ -1,0 +1,176 @@
+{
+  "h1": "Container Image",
+  "sections": [
+    {
+      "h2": "Container Image Creation and Management",
+      "h3s": [
+        {
+          "h3": "What is a container image?"
+        },
+        {
+          "h3": "How are container images created?"
+        },
+        {
+          "h3": "How do container images work?"
+        },
+        {
+          "h3": "Docker and Kubernetes"
+        },
+        {
+          "h3": "Container image benefits"
+        },
+        {
+          "h3": "Container image use cases"
+        },
+        {
+          "h3": "Leading container image providers"
+        },
+        {
+          "h3": "Dependency containers"
+        },
+        {
+          "h3": "Container runtimes"
+        },
+        {
+          "h3": "Authentication"
+        },
+        {
+          "h3": "Object storage"
+        },
+        {
+          "h3": "Container registries"
+        },
+        {
+          "h3": "Base image"
+        },
+        {
+          "h3": "Libraries"
+        },
+        {
+          "h3": "Binaries"
+        },
+        {
+          "h3": "Dependencies"
+        },
+        {
+          "h3": "Configuration files"
+        },
+        {
+          "h3": "Parent Image"
+        },
+        {
+          "h3": "Container orchestration"
+        },
+        {
+          "h3": "Containerization platform"
+        },
+        {
+          "h3": "Container layers"
+        },
+        {
+          "h3": "Containerization benefits"
+        },
+        {
+          "h3": "Container portability"
+        },
+        {
+          "h3": "Container efficiency"
+        },
+        {
+          "h3": "Container standardization"
+        },
+        {
+          "h3": "Container flexibility"
+        },
+        {
+          "h3": "Private registry"
+        },
+        {
+          "h3": "Public registry"
+        },
+        {
+          "h3": "Prebuilt container images"
+        },
+        {
+          "h3": "GitHub Container Registry"
+        },
+        {
+          "h3": "Docker Hub"
+        },
+        {
+          "h3": "Container security"
+        }
+      ]
+    },
+    {
+      "h2": "Docker vs. Kubernetes",
+      "h3s": [
+        {
+          "h3": "Docker images vs. containers"
+        },
+        {
+          "h3": "Docker image benefits"
+        },
+        {
+          "h3": "Docker container benefits"
+        },
+        {
+          "h3": "Kubernetes components"
+        },
+        {
+          "h3": "Kubernetes container images"
+        },
+        {
+          "h3": "Kubernetes container orchestration"
+        },
+        {
+          "h3": "Kubernetes container management"
+        },
+        {
+          "h3": "Kubernetes container runtime"
+        },
+        {
+          "h3": "Kubernetes container environment"
+        },
+        {
+          "h3": "Kubernetes container networking"
+        },
+        {
+          "h3": "Kubernetes container storage"
+        },
+        {
+          "h3": "Kubernetes container security"
+        }
+      ]
+    },
+    {
+      "h2": "Container Image Differences and Use Cases",
+      "h3s": [
+        {
+          "h3": "Difference between Docker images and containers"
+        },
+        {
+          "h3": "Why are Docker images and containers used?"
+        },
+        {
+          "h3": "How Docker images vs. containers work"
+        },
+        {
+          "h3": "Key differences: Docker images vs. Docker containers"
+        },
+        {
+          "h3": "When to use: Docker images vs. Docker containers"
+        },
+        {
+          "h3": "Summary of differences: Docker images vs. Docker containers"
+        },
+        {
+          "h3": "AWS container and image support"
+        },
+        {
+          "h3": "Container"
+        }
+      ]
+    }
+  ]
+}
