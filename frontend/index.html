@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEO AI AGENT - Phase 1 Outline Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .spinner {
+        border-top-color: #3498db;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+      <header class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">
+          SEO AI AGENT
+        </h1>
+        <p class="text-lg text-gray-600 mt-2">
+          Phase 1: Strategic Outline Generator
+        </p>
+      </header>
+
+      <main>
+        <!-- Input Form Card -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+            Create New Project
+          </h2>
+          <form id="projectForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="name"
+                  class="block text-sm font-medium text-gray-700"
+                  >Project Name</label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                  placeholder="AI Chatbots for Lead Gen"
+                />
+              </div>
+              <div>
+                <label
+                  for="keyword"
+                  class="block text-sm font-medium text-gray-700"
+                  >Primary Keyword</label
+                >
+                <input
+                  type="text"
+                  id="keyword"
+                  name="keyword"
+                  required
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                  placeholder="How to Use AI Chatbots for B2B..."
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label
+                  for="base_url"
+                  class="block text-sm font-medium text-gray-700"
+                  >Base URL</label
+                >
+                <input
+                  type="text"
+                  id="base_url"
+                  name="base_url"
+                  required
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                  placeholder="fynix.digital"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label
+                  for="location"
+                  class="block text-sm font-medium text-gray-700"
+                  >Location</label
+                >
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                  placeholder="Miami, FL"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label
+                  for="manual_keywords"
+                  class="block text-sm font-medium text-gray-700"
+                  >Manual Keywords (comma-separated)</label
+                >
+                <textarea
+                  id="manual_keywords"
+                  name="manual_keywords"
+                  rows="3"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                  placeholder="conversational AI, lead qualification, ..."
+                ></textarea>
+              </div>
+            </div>
+            <div class="mt-6">
+              <button
+                type="submit"
+                class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+              >
+                Generate Outline
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Status and Output Card -->
+        <div id="outputCard" class="bg-white rounded-lg shadow-md p-6 hidden">
+          <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+            Generated Outline
+          </h2>
+
+          <!-- Status Display -->
+          <div
+            id="status"
+            class="mb-6 p-4 rounded-md bg-blue-50 border border-blue-200"
+          >
+            <div class="flex items-center">
+              <div
+                id="spinner"
+                class="spinner h-6 w-6 rounded-full border-4 border-t-4 border-gray-200 mr-3"
+              ></div>
+              <p id="statusText" class="text-blue-800 font-medium">
+                Task submitted. Generating outline...
+              </p>
+            </div>
+          </div>
+
+          <!-- Rendered Outline -->
+          <div class="flex justify-end mb-4">
+            <button
+              id="toggleViewBtn"
+              class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Show Raw JSON
+            </button>
+          </div>
+          <div id="renderedView" class="prose max-w-none">
+            <!-- Rendered H1, H2, H3s will be injected here -->
+          </div>
+          <div id="rawJsonView" class="hidden">
+            <pre
+              class="bg-gray-900 text-white rounded-md p-4 text-sm overflow-x-auto"
+            ><code><!-- Raw JSON will be injected here --></code></pre>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const API_BASE_URL = "http://127.0.0.1:8000";
+      const projectForm = document.getElementById("projectForm");
+      const outputCard = document.getElementById("outputCard");
+      const statusDiv = document.getElementById("status");
+      const statusText = document.getElementById("statusText");
+      const spinner = document.getElementById("spinner");
+      const outlineResult = document.getElementById("outlineResult");
+
+      let pollingInterval;
+
+      projectForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Reset UI
+        outputCard.classList.remove("hidden");
+        outlineResult.innerHTML = "";
+        statusText.textContent = "Submitting task to backend...";
+        spinner.classList.remove("hidden");
+        if (pollingInterval) clearInterval(pollingInterval);
+
+        const formData = new FormData(projectForm);
+        const manualKeywords = formData
+          .get("manual_keywords")
+          .split(",")
+          .map((k) => k.trim())
+          .filter(Boolean);
+
+        const payload = {
+          name: formData.get("name"),
+          keyword: formData.get("keyword"),
+          base_url: formData.get("base_url"),
+          genre: "Blog Post", // Defaulting for this simple UI
+          location: formData.get("location") || "India", // Read from form, with a default
+          manual_keywords: manualKeywords.length > 0 ? manualKeywords : null,
+        };
+
+        try {
+          // Step 1: Create the project and get the task ID
+          const createResponse = await fetch(`${API_BASE_URL}/projects/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!createResponse.ok) throw new Error("Failed to create project.");
+
+          const result = await createResponse.json();
+          const { task_id, id: project_id } = result;
+
+          statusText.textContent = `Task ${task_id.substring(
+            0,
+            8
+          )}... is running. Polling for results.`;
+
+          // Step 2: Poll for the task result
+          pollForTaskResult(task_id, project_id);
+        } catch (error) {
+          statusText.textContent = `Error: ${error.message}`;
+          spinner.classList.add("hidden");
+        }
+      });
+
+      function pollForTaskResult(taskId, projectId) {
+        pollingInterval = setInterval(async () => {
+          try {
+            // This endpoint needs to be created in the backend
+            const statusResponse = await fetch(
+              `${API_BASE_URL}/tasks/${taskId}`
+            );
+            if (!statusResponse.ok) return;
+
+            const result = await statusResponse.json();
+
+            if (result.task_status === "SUCCESS") {
+              clearInterval(pollingInterval);
+              statusText.textContent =
+                "Task complete! Fetching final outline...";
+              await fetchAndRenderOutline(projectId);
+            } else if (result.task_status === "FAILURE") {
+              clearInterval(pollingInterval);
+              statusText.textContent = `Task failed: ${
+                result.task_result.error || "Unknown error"
+              }`;
+              spinner.classList.add("hidden");
+            }
+          } catch (error) {
+            console.error("Polling error:", error);
+          }
+        }, 3000); // Poll every 3 seconds
+      }
+
+      async function fetchAndRenderOutline(projectId) {
+        try {
+          const articleResponse = await fetch(
+            `${API_BASE_URL}/projects/${projectId}/article`
+          );
+          if (!articleResponse.ok)
+            throw new Error("Could not fetch the generated article.");
+
+          const article = await articleResponse.json();
+          const outline = JSON.parse(article.content);
+
+          // --- 1. Create the Rendered HTML View ---
+          let renderedHtml = `<h1>${escapeHtml(outline.h1)}</h1>`;
+          outline.sections.forEach((section) => {
+            renderedHtml += `<h2>${escapeHtml(section.h2)}</h2>`;
+            renderedHtml += '<ul class="list-disc pl-5">';
+            section.h3s.forEach((sub) => {
+              renderedHtml += `<li class="ml-5">${escapeHtml(sub.h3)}</li>`;
+            });
+            renderedHtml += "</ul>";
+          });
+          document.getElementById("renderedView").innerHTML = renderedHtml;
+
+          // --- 2. Create the Raw JSON View ---
+          const rawJsonHtml = JSON.stringify(outline, null, 2);
+          document.querySelector("#rawJsonView code").textContent = rawJsonHtml;
+
+          // --- 3. Update the Status ---
+          spinner.classList.add("hidden");
+          statusText.textContent =
+            "Outline successfully generated and displayed below.";
+          statusDiv.classList.remove("bg-blue-50", "border-blue-200");
+          statusDiv.classList.add("bg-green-50", "border-green-200");
+          statusText.classList.remove("text-blue-800");
+          statusText.classList.add("text-green-800");
+        } catch (error) {
+          statusText.textContent = `Error rendering outline: ${error.message}`;
+        }
+      }
+
+      const toggleBtn = document.getElementById("toggleViewBtn");
+      const renderedView = document.getElementById("renderedView");
+      const rawJsonView = document.getElementById("rawJsonView");
+
+      toggleBtn.addEventListener("click", () => {
+        const isRawViewHidden = rawJsonView.classList.contains("hidden");
+        if (isRawViewHidden) {
+          renderedView.classList.add("hidden");
+          rawJsonView.classList.remove("hidden");
+          toggleBtn.textContent = "Show Rendered View";
+        } else {
+          renderedView.classList.remove("hidden");
+          rawJsonView.classList.add("hidden");
+          toggleBtn.textContent = "Show Raw JSON";
+        }
+      });
+
+      function escapeHtml(unsafe) {
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+    </script>
+  </body>
+</html>

@@ -52,3 +52,10 @@ class Article(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     project = relationship("Project", back_populates="articles")
+
+class ArticleStatus(str, enum.Enum):
+    DRAFT = "DRAFT"  # The initial state, meaning an outline exists
+    WRITING_IN_PROGRESS = "WRITING_IN_PROGRESS"
+    DRAFT_COMPLETE = "DRAFT_COMPLETE" # The full first draft is written
+    PUBLISHED = "PUBLISHED"
+    ARCHIVED = "ARCHIVED"

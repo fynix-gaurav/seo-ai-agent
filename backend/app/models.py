@@ -1,6 +1,9 @@
+# models.py
+
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Any
 from .schemas import ProjectStatus
+from .schemas import ProjectStatus, ArticleStatus
 
 # --- API Request/Response Models ---
 
@@ -43,3 +46,27 @@ class H2Section(BaseModel):
 class SeoOutline(BaseModel):
     h1: str
     sections: List[H2Section]
+
+class TaskCreationResponse(BaseModel):
+    task_id: str
+    message: str
+
+
+class Article(BaseModel):
+    id: int
+    title: str
+    content: str
+    status: ArticleStatus
+    project_id: int
+    class Config:
+        orm_mode = True
+
+class TaskStatus(BaseModel):
+    task_id: str
+    task_status: str
+    task_result: Optional[Any] = None
+
+# This was already there, just ensure it exists
+class TaskCreationResponse(BaseModel):
+    task_id: str
+    message: str

@@ -1,4 +1,7 @@
+# crud.py
+
 from sqlalchemy.orm import Session
+from typing import List, Optional
 from . import models, schemas
 
 def create_project(db: Session, project: models.ProjectCreate) -> schemas.Project:
@@ -33,3 +36,25 @@ def create_article_for_project(db: Session, title: str, content: str, project_id
     db.commit()
     db.refresh(db_article)
     return db_article
+
+def get_article(db: Session, article_id: int) -> Optional[schemas.Article]:
+    """Retrieves an article by its ID."""
+    return db.query(schemas.Article).filter(schemas.Article.id == article_id).first()
+
+
+def update_article_content(
+    db: Session, article_id: int, content: str, status: schemas.ArticleStatus
+) -> schemas.Article:
+    """Updates the content and status of an article."""
+    db_article = get_article(db, article_id)
+    if db_article:
+        db_article.content = content
+        db_article.status = status
+        db.commit()
+        db.refresh(db_article)
+    return db_article
+
+
+def get_article_by_project_id(db: Session, project_id: int) -> Optional[schemas.Article]:
+    """Retrieves the first article associated with a project ID."""
+    return db.query(schemas.Article).filter(schemas.Article.project_id == project_id).first()
