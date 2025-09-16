@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from .database import create_db_and_tables, get_db
 from . import crud, models, schemas
 from .tasks import generate_outline_task
-from .tasks import generate_outline_task, generate_full_article_task
+from .tasks import generate_outline_task
 
 from celery.result import AsyncResult
 from .celery_config import celery_app
@@ -16,7 +16,6 @@ from .celery_config import celery_app
 create_db_and_tables()
 
 app = FastAPI(title="SEO AI AGENT", version="1.0.0")
-
 
 @app.get("/", tags=["Root"])
 async def read_root():
@@ -65,12 +64,3 @@ def get_article_for_project(project_id: int, db: Session = Depends(get_db)):
     if article is None:
         raise HTTPException(status_code=404, detail="Article not found for this project.")
     return article
-
-@app.post("/articles/{article_id}/generate", response_model=models.TaskCreationResponse, tags=["Articles"])
-def generate_article_endpoint(article_id: int):
-    """
-    Triggers the asynchronous generation of a full article draft from an outline.
-    """
-    task = generate_full_article_task.delay(article_id)
-    return {"task_id": task.id, "message": "Article generation process started."}
-

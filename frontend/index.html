@@ -178,7 +178,6 @@
       const statusDiv = document.getElementById("status");
       const statusText = document.getElementById("statusText");
       const spinner = document.getElementById("spinner");
-      const outlineResult = document.getElementById("outlineResult");
 
       let pollingInterval;
 
@@ -187,7 +186,8 @@
 
         // Reset UI
         outputCard.classList.remove("hidden");
-        outlineResult.innerHTML = "";
+        document.getElementById('renderedView').innerHTML = ''; // <-- ADD THIS LINE
+        document.querySelector('#rawJsonView code').textContent = '';
         statusText.textContent = "Submitting task to backend...";
         spinner.classList.remove("hidden");
         if (pollingInterval) clearInterval(pollingInterval);
