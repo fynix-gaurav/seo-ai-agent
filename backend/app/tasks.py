@@ -9,7 +9,12 @@ from . import crud, schemas, models
 from .database import SessionLocal
 from .agents.writer_editor_agent import app as writing_agent_app, GraphState, ArticleDraft
 
-from .config import DEV_OPENAI_MODEL, DEV_ANTHROPIC_MODEL, PROD_ANTHROPIC_STRATEGIST_MODEL
+from .config import (
+    DEV_OPENAI_MODEL_GROUPER,
+    DEV_ANTHROPIC_MODEL_ARCHITECT,
+    DEV_ANTHROPIC_MODEL_REFINER
+)
+
 from .prompts import (
     TOPIC_GROUPER_SYSTEM_PROMPT,
     TOPIC_GROUPER_USER_PROMPT,
@@ -49,7 +54,7 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         print(f"Scraped {len(scraped_headings)} headings from top {len(urls)} URLs.")
 
         # --- AI Step 1: Topic Grouper (GPT-3.5-Turbo) ---
-        print(f"Grouping topics with {DEV_OPENAI_MODEL}o...")
+        print(f"Grouping topics with {DEV_OPENAI_MODEL_GROUPER}...")
         grouper_parser = PydanticOutputParser(pydantic_object=models.TopicClusterList)
         grouper_prompt = ChatPromptTemplate.from_messages(
             [
@@ -58,7 +63,7 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
             ]
         )
         # --- MODEL UPDATED TO THE MOST COST-EFFECTIVE OPTION ---
-        llm_grouper = ChatOpenAI(model=DEV_OPENAI_MODEL, temperature=0, api_key=OPENAI_API_KEY)
+        llm_grouper = ChatOpenAI(model=DEV_OPENAI_MODEL_GROUPER, temperature=0, api_key=OPENAI_API_KEY)
         chain_grouper = grouper_prompt | llm_grouper | grouper_parser
         
         topic_clusters = chain_grouper.invoke({
@@ -68,7 +73,7 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         })
 
         # --- AI Step 2: Outline Architect (Claude 3 Haiku) ---
-        print(f"Architecting outline with Claude {DEV_ANTHROPIC_MODEL}...")
+        print(f"Architecting outline with {DEV_ANTHROPIC_MODEL_ARCHITECT}...")
         architect_parser = PydanticOutputParser(pydantic_object=models.SeoOutline)
         architect_prompt = ChatPromptTemplate.from_messages(
             [
@@ -79,9 +84,9 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         
         
         if ANTHROPIC_API_KEY:
-            llm_architect = ChatAnthropic(model=DEV_ANTHROPIC_MODEL, temperature=0, api_key=ANTHROPIC_API_KEY)
+            llm_architect = ChatAnthropic(model=DEV_ANTHROPIC_MODEL_ARCHITECT, temperature=0, api_key=ANTHROPIC_API_KEY)
         else: # Fallback to OpenAI's cheapest
-            llm_architect = ChatOpenAI(model=DEV_OPENAI_MODEL, temperature=0, api_key=OPENAI_API_KEY)
+            llm_architect = ChatOpenAI(model=DEV_OPENAI_MODEL_GROUPER, temperature=0, api_key=OPENAI_API_KEY)
 
         chain_architect = architect_prompt | llm_architect | architect_parser
         
@@ -92,7 +97,7 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         })
 
         # --- NEW AI Step 3: Outline Refiner (Claude 3 Opus) ---
-        print(f"Refining outline with {DEV_ANTHROPIC_MODEL}...")
+        print(f"Refining outline with {DEV_ANTHROPIC_MODEL_REFINER}...")
         
         # We reuse the same Pydantic parser
         refiner_parser = architect_parser 
@@ -117,7 +122,7 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         
         # We use our most powerful model for this final strategic task
         llm_refiner = ChatAnthropic(
-            model=DEV_ANTHROPIC_MODEL, temperature=0, api_key=ANTHROPIC_API_KEY
+            model=DEV_ANTHROPIC_MODEL_REFINER, temperature=0, api_key=ANTHROPIC_API_KEY
         )
         
         chain_refiner = refiner_prompt | llm_refiner | refiner_parser

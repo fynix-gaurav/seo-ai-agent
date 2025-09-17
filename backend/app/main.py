@@ -2,6 +2,9 @@
 
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
 
 from sqlalchemy.orm import Session
 from .database import create_db_and_tables, get_db
@@ -17,9 +20,8 @@ create_db_and_tables()
 
 app = FastAPI(title="SEO AI AGENT", version="1.0.0")
 
-@app.get("/", tags=["Root"])
-async def read_root():
-    return {"status": "ok", "message": "Welcome to the SEO AI AGENT API"}
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,6 +30,11 @@ app.add_middleware(
     allow_methods=["*"], # Allows all methods
     allow_headers=["*"], # Allows all headers
 )
+
+@app.get("/", response_class=FileResponse, tags=["Root"])
+async def read_root():
+    return "app/static/index.html"
+
 
 @app.post("/projects/", response_model=models.ProjectCreateResponse, tags=["Projects"])
 def create_new_project(
