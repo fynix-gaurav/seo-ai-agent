@@ -27,6 +27,7 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
+from langchain.output_parsers.fix import OutputFixingParser
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
@@ -75,6 +76,11 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         # --- AI Step 2: Outline Architect (Claude 3 Haiku) ---
         print(f"Architecting outline with {DEV_ANTHROPIC_MODEL_ARCHITECT}...")
         architect_parser = PydanticOutputParser(pydantic_object=models.SeoOutline)
+
+        output_fixing_parser = OutputFixingParser.from_llm(
+            parser=architect_parser, llm=ChatOpenAI(model=DEV_OPENAI_MODEL_GROUPER)
+        )
+
         architect_prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", OUTLINE_ARCHITECT_SYSTEM_PROMPT),
@@ -88,7 +94,7 @@ def generate_outline_task(self, project_id: int, keyword: str, manual_keywords: 
         else: # Fallback to OpenAI's cheapest
             llm_architect = ChatOpenAI(model=DEV_OPENAI_MODEL_GROUPER, temperature=0, api_key=OPENAI_API_KEY)
 
-        chain_architect = architect_prompt | llm_architect | architect_parser
+        chain_architect = architect_prompt | llm_architect | output_fixing_parser
         
         draft_outline = chain_architect.invoke({
             "format_instructions": architect_parser.get_format_instructions(),

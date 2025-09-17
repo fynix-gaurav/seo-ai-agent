@@ -1,3 +1,5 @@
+# app/prompts.py
+
 # A central repository for all LLM prompt templates used in the application.
 
 # --- Phase 1: Outline Generation Prompts ---
@@ -20,9 +22,10 @@ TOPIC_GROUPER_USER_PROMPT = """
 OUTLINE_ARCHITECT_SYSTEM_PROMPT = """Act as an expert SEO Content Strategist. Your task is to take topic clusters and architect them into a final, logical content outline for a B2B audience. Your sole output is the hierarchical structure of headings. You MUST format your output as a JSON object that strictly adheres to the provided schema.
 
 **CRITICAL RULES:**
-1. Your entire response must be ONLY the JSON object, starting with `{{` and ending with `}}`. Do not include any other text.
-2. Every object in the `sections` list must contain both a non-empty `h2` key and a non-empty `h3s` list.
-3. Every object within an `h3s` list must contain a non-empty string for the `h3` key. Do not generate empty objects like `{{}}`.
+1. Your entire response must be ONLY the JSON object, starting with `{{` and ending with `}}`. Do not include any other text, explanations, or markdown formatting like ```json.
+2. Every object in the `sections` list MUST contain both a non-empty `h2` key and a non-empty `h3s` list.
+3. Every object within an `h3s` list MUST contain a non-empty string for the `h3` key.
+4. **DO NOT generate empty objects like `{{}}`.** This is a strict violation. The `h3s` list should only contain valid `{{"h3": "..."}}` objects.
 """
 
 OUTLINE_ARCHITECT_USER_PROMPT = """

@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
+from pathlib import Path
 
 from sqlalchemy.orm import Session
 from .database import create_db_and_tables, get_db
@@ -18,9 +19,10 @@ from .celery_config import celery_app
 # Initialize Database and tables
 create_db_and_tables()
 
-app = FastAPI(title="SEO AI AGENT", version="1.0.0")
+BASE_DIR = Path(__file__).resolve().parent
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
+app = FastAPI(title="SEO AI AGENT", version="1.0.0")
 
 
 app.add_middleware(
@@ -30,6 +32,9 @@ app.add_middleware(
     allow_methods=["*"], # Allows all methods
     allow_headers=["*"], # Allows all headers
 )
+
+app.mount("/static", StaticFiles(directory= BASE_DIR / "static"), name="static")
+
 
 @app.get("/", response_class=FileResponse, tags=["Root"])
 async def read_root():
