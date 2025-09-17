@@ -17,6 +17,10 @@ TOPIC_GROUPER_USER_PROMPT = """
 <manual_keywords>
 {manual_keywords}
 </manual_keywords>
+
+<extracted_entities>
+{extracted_entities}
+</extracted_entities>
 """
 
 OUTLINE_ARCHITECT_SYSTEM_PROMPT = """Act as an expert SEO Content Strategist. Your task is to take topic clusters and architect them into a final, logical content outline for a B2B audience. Your sole output is the hierarchical structure of headings. You MUST format your output as a JSON object that strictly adheres to the provided schema.
@@ -93,4 +97,16 @@ OUTLINE_REFINER_SYSTEM_PROMPT = """Act as a Senior SEO Content Strategist and Ed
 2.  **Consolidate and Rephrase:** Rephrase the final headings to be clear, engaging, and unique. Ensure a logical flow.
 3.  **Add a Strategic Angle (The "Value-Add"):** Identify one or two unique, high-value topics or angles that are missing from the draft. Add these as new, compelling H3s to the most relevant section to make our article stand out.
 4.  **Maintain Structure:** Your final output MUST be a JSON object that strictly adheres to the provided `SeoOutline` schema. Do not add any conversational text.
+"""
+
+OUTLINE_REFINER_USER_PROMPT = """
+<output_instructions>
+{format_instructions}
+</output_instructions>
+
+**Primary Keyword:** "{keyword}"
+
+<draft_outline>
+{draft_outline_json}
+</draft_outline>
 """

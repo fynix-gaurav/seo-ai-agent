@@ -11,7 +11,7 @@ def create_project(db: Session, project: models.ProjectCreate) -> schemas.Projec
         base_url=project.base_url,
         genre=project.genre,
         location=project.location,
-        manual_keywords=project.manual_keywords # <-- ADD THIS LINE
+        manual_keywords=project.manual_keywords 
     )
     db.add(db_project)
     db.commit()
@@ -54,6 +54,16 @@ def update_article_content(
         db.refresh(db_article)
     return db_article
 
+def update_project_entities(db: Session, project_id: int, entities: List[str]) -> schemas.Project:
+    """
+    Updates the extracted_entities for a project.
+    """
+    db_project = db.query(schemas.Project).filter(schemas.Project.id == project_id).first()
+    if db_project:
+        db_project.extracted_entities = entities
+        db.commit()
+        db.refresh(db_project)
+    return db_project
 
 def get_article_by_project_id(db: Session, project_id: int) -> Optional[schemas.Article]:
     """Retrieves the first article associated with a project ID."""

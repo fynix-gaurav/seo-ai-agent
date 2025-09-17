@@ -92,14 +92,14 @@
                 <label
                   for="location"
                   class="block text-sm font-medium text-gray-700"
-                  >Location</label
+                  >Location (For Regional Search Results)</label
                 >
                 <input
                   type="text"
                   id="location"
                   name="location"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                  placeholder="Miami, FL"
+                  placeholder="India (leave blank for global search)"
                 />
               </div>
               <div class="md:col-span-2">
@@ -203,8 +203,8 @@
           name: formData.get("name"),
           keyword: formData.get("keyword"),
           base_url: formData.get("base_url"),
-          genre: "Blog Post", // Defaulting for this simple UI
-          location: formData.get("location") || "India", // Read from form, with a default
+          genre: "Blog Post", // Defaulting for this simple UI // Just a placehoder for now in development phase
+          location: formData.get("location") || null, // Read from form, with a default to null for global search
           manual_keywords: manualKeywords.length > 0 ? manualKeywords : null,
         };
 

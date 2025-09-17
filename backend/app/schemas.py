@@ -35,7 +35,8 @@ class Project(Base):
     base_url = Column(String, nullable=False)
     genre = Column(String, nullable=True)
     location = Column(String, nullable=True, default="India")
-    manual_keywords = Column(JSON, nullable=True) # <-- ADD THIS COLUMN
+    manual_keywords = Column(JSON, nullable=True) 
+    extracted_entities = Column(JSON, nullable=True)
     status = Column(Enum(ProjectStatus), default=ProjectStatus.PENDING, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

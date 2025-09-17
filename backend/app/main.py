@@ -47,14 +47,13 @@ def create_new_project(
 ):
     db_project = crud.create_project(db=db, project=project)
     
-    # Pass the manual_keywords to the background task
     task = generate_outline_task.delay(
         project_id=db_project.id, 
         keyword=db_project.keyword,
+        location=db_project.location,  
         manual_keywords=db_project.manual_keywords
     )
     
-    # Use the .from_orm compatibility mode to create the response model
     response_data = models.Project.model_validate(db_project)
     return models.ProjectCreateResponse(**response_data.model_dump(), task_id=task.id)
 

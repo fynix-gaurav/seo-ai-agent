@@ -4,7 +4,6 @@ DEV_OPENAI_MODEL_GROUPER = "gpt-3.5-turbo"
 DEV_ANTHROPIC_MODEL_ARCHITECT = "claude-3-haiku-20240307"
 DEV_ANTHROPIC_MODEL_REFINER = "claude-3-5-haiku-20241022"
 
-
 # --- Production Models (Future Use) ---
 # The most powerful models for the final production application.
 PROD_OPENAI_STRATEGIST_MODEL = "gpt-4o"
