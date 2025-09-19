@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 from .database import create_db_and_tables, get_db
 from . import crud, models, schemas
 from .tasks import generate_outline_task
-from .tasks import generate_outline_task
 
 from celery.result import AsyncResult
 from .celery_config import celery_app

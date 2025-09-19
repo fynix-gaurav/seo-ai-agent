@@ -40,6 +40,26 @@ OUTLINE_ARCHITECT_USER_PROMPT = """
 </topic_clusters>
 """
 
+
+OUTLINE_REFINER_SYSTEM_PROMPT = """Act as a Senior SEO Content Strategist and Editor-in-Chief. Your task is to take a DRAFT article outline and transform it into a final, strategically superior, and non-redundant content blueprint.
+
+**CRITICAL RULES:**
+1.  **De-duplicate Ruthlessly:** Review all H3s under each H2. Identify and merge any subheadings that are semantically identical or highly similar. Consolidate them into a single, well-phrased H3.
+2.  **Consolidate and Rephrase:** Rephrase the final headings to be clear, engaging, and unique. Ensure a logical flow.
+3.  **Add a Strategic Angle (The "Value-Add"):** Identify one or two unique, high-value topics or angles that are missing from the draft. Add these as new, compelling H3s to the most relevant section to make our article stand out.
+4.  **Maintain Structure:** Your final output MUST be a JSON object that strictly adheres to the provided `SeoOutline` schema. Do not add any conversational text.
+"""
+
+OUTLINE_REFINER_USER_PROMPT = """
+<output_instructions>
+{format_instructions}
+</output_instructions>
+**Primary Keyword:** "{keyword}"
+<draft_outline>
+{draft_outline_json}
+</draft_outline>
+"""
+
 # --- Phase 2: Content Generation Prompts ---
 
 WRITER_NODE_SYSTEM_PROMPT = """You are an expert B2B content writer and subject matter expert. Your task is to write a comprehensive, engaging, and authoritative section for a larger article. The tone should be professional, clear, and credible, tailored for a B2B audience."""
@@ -86,11 +106,3 @@ Based on the criteria, make a decision.
 </output_instructions>
 """
 
-OUTLINE_REFINER_SYSTEM_PROMPT = """Act as a Senior SEO Content Strategist and Editor-in-Chief. Your task is to take a DRAFT article outline and transform it into a final, strategically superior, and non-redundant content blueprint.
-
-**CRITICAL RULES:**
-1.  **De-duplicate Ruthlessly:** Review all H3s under each H2. Identify and merge any subheadings that are semantically identical or highly similar. Consolidate them into a single, well-phrased H3.
-2.  **Consolidate and Rephrase:** Rephrase the final headings to be clear, engaging, and unique. Ensure a logical flow.
-3.  **Add a Strategic Angle (The "Value-Add"):** Identify one or two unique, high-value topics or angles that are missing from the draft. Add these as new, compelling H3s to the most relevant section to make our article stand out.
-4.  **Maintain Structure:** Your final output MUST be a JSON object that strictly adheres to the provided `SeoOutline` schema. Do not add any conversational text.
-"""
